@@ -1,350 +1,684 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="th">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Thamrong Phiriyasiriphaisan | Backend Developer</title>
+  <title>Soraphob Global — Prototype Flow</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    :root {
-      color-scheme: dark;
-      --bg: #020617;
-      --surface: rgba(15, 23, 42, 0.88);
-      --surface-strong: rgba(15, 23, 42, 0.96);
-      --text: #e5e7eb;
-      --accent: #38bdf8;
-      --accent-soft: rgba(56, 189, 248, 0.18);
-      --glow: rgba(56, 189, 248, 0.22);
-    }
-
+    :root { color-scheme: light; }
     body {
-      margin: 0;
+      font-family: 'Inter', 'Noto Sans Thai', system-ui, sans-serif;
+      background: linear-gradient(180deg, #f8fafc 0%, #eef2ff 100%);
       min-height: 100vh;
-      background: radial-gradient(circle at top left, rgba(56, 189, 248, 0.16), transparent 24%),
-        radial-gradient(circle at bottom right, rgba(16, 185, 129, 0.14), transparent 26%),
-        var(--bg);
-      color: var(--text);
-      font-family: 'Inter', system-ui, sans-serif;
-      scroll-behavior: smooth;
     }
-
-    .glass {
-      background: var(--surface);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
-      border: 1px solid rgba(148, 163, 184, 0.12);
-    }
-
-    .section-title::after {
-      content: '';
-      display: inline-block;
-      width: 3rem;
-      height: 0.2rem;
-      margin-left: 0.8rem;
-      background: var(--accent);
-      vertical-align: middle;
-      border-radius: 999px;
-      opacity: 0.9;
-    }
-
-    .pulse {
-      animation: pulse 3.4s ease-in-out infinite;
-    }
-
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
-    }
-
-    @keyframes pulse {
-      0%, 100% { box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.18); }
-      50% { box-shadow: 0 0 30px 6px rgba(56, 189, 248, 0.12); }
-    }
-
-    .reveal {
-      opacity: 0;
-      transform: translateY(22px);
-      animation: reveal 0.9s ease forwards;
-    }
-
-    @keyframes reveal {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .hero-blob {
+    .brand-grad { background: linear-gradient(135deg, #059669 0%, #0d9488 50%, #0284c7 100%); }
+    .brand-text { background: linear-gradient(135deg, #059669, #0284c7); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .step-card { transition: all .2s ease; }
+    .step-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(2, 132, 199, 0.12); }
+    .flow-arrow::after {
+      content: '→';
+      color: #0d9488;
+      font-size: 1.75rem;
+      font-weight: 700;
       position: absolute;
-      inset: 0;
-      pointer-events: none;
-      filter: blur(58px);
-      opacity: 0.55;
+      right: -1.1rem;
+      top: 50%;
+      transform: translateY(-50%);
     }
-
-    .hero-blob span {
-      position: absolute;
-      display: block;
-      width: 240px;
-      height: 240px;
-      border-radius: 999px;
-      background: radial-gradient(circle, rgba(56, 189, 248, 0.56), transparent 60%);
-    }
-
-    .hero-blob span:nth-child(1) { left: 5%; top: 10%; }
-    .hero-blob span:nth-child(2) { right: 12%; top: 18%; width: 320px; height: 320px; background: radial-gradient(circle, rgba(16, 185, 129, 0.45), transparent 60%); }
-    .hero-blob span:nth-child(3) { left: 30%; bottom: 8%; width: 220px; height: 220px; background: radial-gradient(circle, rgba(168, 85, 247, 0.2), transparent 60%); }
-
-    .skill-chip {
-      transition: transform 220ms ease, background 220ms ease;
-    }
-    .skill-chip:hover {
-      transform: translateY(-3px) scale(1.02);
-      background: rgba(56, 189, 248, 0.18);
-    }
-
-    input, textarea {
-      color: var(--text);
-    }
+    @media (max-width: 768px) { .flow-arrow::after { content: '↓'; right: 50%; top: auto; bottom: -1.5rem; transform: translateX(50%); } }
+    .tab-btn.active { background: #0d9488; color: white; }
+    .tab-btn { transition: all .15s ease; }
+    .pulse-dot { animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100% { opacity:1 } 50% { opacity:.4 } }
+    .status-pill { font-size: .75rem; padding: .15rem .6rem; border-radius: 999px; font-weight: 600; }
+    details > summary { list-style: none; cursor: pointer; }
+    details > summary::-webkit-details-marker { display: none; }
+    .scroll-mask { mask-image: linear-gradient(90deg, transparent, black 2%, black 98%, transparent); }
   </style>
 </head>
-<body class="antialiased text-slate-100">
-  <div class="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8 py-6">
-    <header class="flex items-center justify-between gap-4 py-4">
+<body class="text-slate-800">
+
+<!-- ============ NAV ============ -->
+<nav class="sticky top-0 z-40 bg-white/80 backdrop-blur border-b border-slate-200">
+  <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 brand-grad rounded-lg flex items-center justify-center text-white font-bold text-lg shadow-sm">S</div>
       <div>
-        <a href="#home" class="text-xl font-semibold tracking-tight text-white">Thamrong<span class="text-cyan-400">.</span></a>
+        <div class="font-bold text-lg leading-tight">Soraphob Global</div>
+        <div class="text-xs text-slate-500">Supply Chain × E-Commerce Prototype</div>
       </div>
-      <nav class="hidden md:flex items-center gap-6 text-slate-300">
-        <a href="#about" class="hover:text-white transition flex items-center gap-2"><span class="text-cyan-400">•</span> About</a>
-        <a href="#skills" class="hover:text-white transition flex items-center gap-2"><span class="text-cyan-400">•</span> Skills</a>
-        <a href="#projects" class="hover:text-white transition flex items-center gap-2"><span class="text-cyan-400">•</span> Projects</a>
-        <a href="#contact" class="hover:text-white transition flex items-center gap-2"><span class="text-cyan-400">•</span> Contact</a>
-      </nav>
-      <div class="hidden md:flex items-center gap-3">
-        <a href="https://github.com/" target="_blank" rel="noreferrer" class="inline-flex items-center gap-2 text-slate-300 hover:text-white transition">
-          <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/github.svg" alt="GitHub" class="h-5 w-5" style="filter: invert(1);" />
-          GitHub
-        </a>
-        <a href="https://www.linkedin.com/" target="_blank" rel="noreferrer" class="inline-flex items-center gap-2 text-slate-300 hover:text-white transition">
-          <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/linkedin.svg" alt="LinkedIn" class="h-5 w-5" style="filter: invert(1);" />
-          LinkedIn
-        </a>
-      </div>
-      <button class="md:hidden p-2 rounded-full bg-slate-800 border border-slate-700 text-slate-300">Menu</button>
-    </header>
-
-    <section id="home" class="relative overflow-hidden rounded-3xl glass p-8 md:p-12 shadow-2xl shadow-cyan-500/10 mb-14">
-      <div class="hero-blob" aria-hidden="true">
-        <span></span>
-        <span></span>
-        <span></span>
-      </div>
-      <div class="grid gap-10 lg:grid-cols-[1.2fr_0.8fr] items-center">
-        <div class="space-y-6 reveal" style="animation-delay: 0.1s;">
-          <span class="inline-flex items-center gap-2 rounded-full bg-cyan-500/10 px-4 py-2 text-sm font-medium text-cyan-200">Backend Developer • Hardware-to-Cloud • AI Systems</span>
-          <div class="space-y-4">
-            <h1 class="text-4xl sm:text-5xl font-semibold tracking-tight text-white">Thamrong Phiriyasiriphaisan</h1>
-            <p class="max-w-2xl text-slate-300 text-lg leading-8">A passionate developer with 4-5 years of programming experience focused on building scalable backend systems and AI-driven solutions.</p>
-          </div>
-          <div class="flex flex-wrap gap-3 items-center">
-            <a href="#projects" class="inline-flex items-center gap-2 rounded-full bg-cyan-400/15 px-5 py-3 text-white border border-cyan-400/20 hover:bg-cyan-400/20 transition">Explore projects</a>
-            <a href="#contact" class="inline-flex items-center gap-2 rounded-full bg-slate-900/90 px-5 py-3 text-slate-200 border border-slate-700 hover:border-cyan-400 transition">Let’s connect</a>
-          </div>
-          <div class="grid grid-cols-2 gap-4 sm:max-w-md">
-            <div class="rounded-2xl bg-slate-900/80 p-4 border border-slate-700">
-              <p class="text-sm text-slate-400">Experience</p>
-              <p class="mt-2 text-2xl font-semibold text-white">4-5 yrs</p>
-            </div>
-            <div class="rounded-2xl bg-slate-900/80 p-4 border border-slate-700">
-              <p class="text-sm text-slate-400">Education</p>
-              <p class="mt-2 text-2xl font-semibold text-white">Computer Engineering</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="relative isolate mx-auto max-w-md rounded-[2rem] border border-cyan-500/10 bg-slate-950/80 p-4 shadow-2xl shadow-slate-950/40 ring-1 ring-white/5">
-          <div class="absolute -left-10 top-6 h-24 w-24 rounded-full bg-cyan-500/10 blur-2xl"></div>
-          <img src="profile.jpg" alt="Profile photo of Thamrong" class="relative mx-auto h-80 w-80 rounded-[2rem] object-cover border border-slate-700 shadow-2xl shadow-cyan-500/20" />
-          <div class="mt-6 rounded-3xl bg-slate-900/90 p-5 border border-slate-700">
-            <p class="text-sm uppercase tracking-[0.22em] text-cyan-300/80">Hardware · Backend · AI</p>
-            <h2 class="mt-3 text-2xl font-semibold text-white">Hardware-to-Cloud Expertise</h2>
-            <p class="mt-3 text-slate-400 leading-7">Strong foundation in hardware-to-software communication with real-world experience across IoT, AI pipelines, and backend APIs.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="about" class="mb-14">
-      <div class="reveal" style="animation-delay: 0.2s;">
-        <div class="flex items-center gap-3">
-          <svg class="h-6 w-6 text-cyan-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.27 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z"></path>
-          </svg>
-          <h2 class="section-title text-2xl font-semibold text-white">About Me</h2>
-        </div>
-        <p class="mt-4 max-w-3xl text-slate-300 leading-8">I am a 23-year-old Computer Engineering graduate from RMUTT. I have a strong foundation in hardware-to-software communication and a proven track record in national engineering competitions like TESA Top Gun Rally. I thrive on learning new technologies and taking responsibility for complex assignments.</p>
-      </div>
-    </section>
-
-    <section id="skills" class="mb-16">
-      <div class="grid gap-8 lg:grid-cols-[0.6fr_1.4fr] items-start">
-        <div class="space-y-4 reveal" style="animation-delay: 0.25s;">
-          <div class="flex items-center gap-3">
-            <svg class="h-6 w-6 text-cyan-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M4 19h16M4 5h16M4 12h16"></path>
-            </svg>
-            <h2 class="section-title text-2xl font-semibold text-white">Technical Skills</h2>
-          </div>
-          <p class="text-slate-400 leading-7">Organized for fast comprehension: languages, backend infrastructure, databases, and tools that power modern systems.</p>
-        </div>
-        <div class="grid gap-5 sm:grid-cols-2">
-          <div class="rounded-3xl glass p-6">
-            <h3 class="text-lg font-semibold text-white mb-4">Languages</h3>
-            <div class="space-y-3">
-              <p class="text-slate-300">Java (Spring Boot), C# (.NET), Python (Flask), C++, JavaScript, TypeScript, PHP</p>
-            </div>
-          </div>
-          <div class="rounded-3xl glass p-6">
-            <h3 class="text-lg font-semibold text-white mb-4">Backend & Infrastructure</h3>
-            <p class="text-slate-300">REST API, Docker, WebSocket, Microcontrollers (ESP32/Arduino/Raspberry Pi)</p>
-          </div>
-          <div class="rounded-3xl glass p-6">
-            <h3 class="text-lg font-semibold text-white mb-4">Databases</h3>
-            <p class="text-slate-300">MySQL, Postgres, Oracle, MongoDB, Redis</p>
-          </div>
-          <div class="rounded-3xl glass p-6">
-            <h3 class="text-lg font-semibold text-white mb-4">Tools</h3>
-            <p class="text-slate-300">Figma, Postman, DBeaver</p>
-          </div>
-        </div>
-      </div>
-      <div class="mt-10 grid gap-3 sm:grid-cols-3">
-        <span class="skill-chip inline-flex rounded-full border border-slate-700 bg-slate-900/75 px-4 py-2 text-sm text-slate-300">Spring Boot</span>
-        <span class="skill-chip inline-flex rounded-full border border-slate-700 bg-slate-900/75 px-4 py-2 text-sm text-slate-300">Docker</span>
-        <span class="skill-chip inline-flex rounded-full border border-slate-700 bg-slate-900/75 px-4 py-2 text-sm text-slate-300">WebSocket</span>
-        <span class="skill-chip inline-flex rounded-full border border-slate-700 bg-slate-900/75 px-4 py-2 text-sm text-slate-300">RAG + LLM</span>
-        <span class="skill-chip inline-flex rounded-full border border-slate-700 bg-slate-900/75 px-4 py-2 text-sm text-slate-300">ESP32</span>
-        <span class="skill-chip inline-flex rounded-full border border-slate-700 bg-slate-900/75 px-4 py-2 text-sm text-slate-300">MongoDB</span>
-      </div>
-    </section>
-
-    <section id="projects" class="mb-16">
-      <div class="reveal" style="animation-delay: 0.3s;">
-        <h2 class="section-title text-2xl font-semibold text-white">Key Projects</h2>
-      </div>
-      <div class="mt-8 grid gap-5 xl:grid-cols-2">
-        <article class="group rounded-3xl border border-slate-800 bg-slate-950/90 p-6 shadow-lg shadow-cyan-500/5 transition hover:-translate-y-1 hover:border-cyan-400/20">
-          <div class="flex items-center justify-between gap-3 text-slate-400 text-sm">
-            <span class="rounded-full bg-slate-800 px-3 py-1">AI</span>
-            <span>RAG · Vector DB · LLM</span>
-          </div>
-          <h3 class="mt-5 text-xl font-semibold text-white">AI Insurance Chatbot</h3>
-          <p class="mt-3 text-slate-300 leading-7">Developed a RAG-based system using vector databases and LLMs for contextual information retrieval to answer complex insurance questions with accuracy.</p>
-        </article>
-        <article class="group rounded-3xl border border-slate-800 bg-slate-950/90 p-6 shadow-lg shadow-cyan-500/5 transition hover:-translate-y-1 hover:border-cyan-400/20">
-          <div class="flex items-center justify-between gap-3 text-slate-400 text-sm">
-            <span class="rounded-full bg-slate-800 px-3 py-1">API</span>
-            <span>Public Data · Procurement</span>
-          </div>
-          <h3 class="mt-5 text-xl font-semibold text-white">Event Procurement Platform (DONKI)</h3>
-          <p class="mt-3 text-slate-300 leading-7">Built APIs for public event data scraping and procurement management, simplifying event sourcing and purchasing workflows.</p>
-        </article>
-        <article class="group rounded-3xl border border-slate-800 bg-slate-950/90 p-6 shadow-lg shadow-cyan-500/5 transition hover:-translate-y-1 hover:border-cyan-400/20">
-          <div class="flex items-center justify-between gap-3 text-slate-400 text-sm">
-            <span class="rounded-full bg-slate-800 px-3 py-1">AI</span>
-            <span>Industrial Search</span>
-          </div>
-          <h3 class="mt-5 text-xl font-semibold text-white">AI Supplies Suggestion (SCGP)</h3>
-          <p class="mt-3 text-slate-300 leading-7">Created AI-powered logic for industrial supply search and recommendation, improving product discovery for procurement teams.</p>
-        </article>
-        <article class="group rounded-3xl border border-slate-800 bg-slate-950/90 p-6 shadow-lg shadow-cyan-500/5 transition hover:-translate-y-1 hover:border-cyan-400/20">
-          <div class="flex items-center justify-between gap-3 text-slate-400 text-sm">
-            <span class="rounded-full bg-slate-800 px-3 py-1">Data</span>
-            <span>Automation · ETL</span>
-          </div>
-          <h3 class="mt-5 text-xl font-semibold text-white">News Tracking & Analysis (Royal Thai Air Force)</h3>
-          <p class="mt-3 text-slate-300 leading-7">Developed automated extraction and cleaning pipelines for online news, enabling fast analysis of public sentiment and operational coverage.</p>
-        </article>
-        <article class="group rounded-3xl border border-slate-800 bg-slate-950/90 p-6 shadow-lg shadow-cyan-500/5 transition hover:-translate-y-1 hover:border-cyan-400/20">
-          <div class="flex items-center justify-between gap-3 text-slate-400 text-sm">
-            <span class="rounded-full bg-slate-800 px-3 py-1">Realtime</span>
-            <span>WebSocket · IoT</span>
-          </div>
-          <h3 class="mt-5 text-xl font-semibold text-white">Real-time Hardware Sync (TESA #18)</h3>
-          <p class="mt-3 text-slate-300 leading-7">Implemented a scalable WebSocket backend for real-time hardware communication, supporting synchronized device telemetry and control.</p>
-        </article>
-      </div>
-    </section>
-
-    <section class="mb-16 rounded-3xl glass p-8 shadow-2xl shadow-slate-950/20">
-      <div class="grid gap-10 lg:grid-cols-[1fr_0.9fr] items-start">
-        <div class="space-y-5 reveal" style="animation-delay: 0.35s;">
-          <div class="flex items-center gap-3">
-            <svg class="h-6 w-6 text-cyan-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M12 2l9 4.5v11L12 22 3 17.5v-11L12 2z"></path>
-              <path d="M12 22V12"></path>
-            </svg>
-            <h2 class="section-title text-2xl font-semibold text-white">Education</h2>
-          </div>
-          <div class="rounded-3xl bg-slate-900/90 p-6 border border-slate-700">
-            <p class="text-slate-400">Bachelor of Engineering in Computer Engineering</p>
-            <p class="mt-2 text-white font-semibold">Rajamangala University of Technology Thanyaburi</p>
-          </div>
-        </div>
-        <div class="space-y-5 reveal" style="animation-delay: 0.4s;">
-          <div class="flex items-center gap-3">
-            <svg class="h-6 w-6 text-cyan-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M4 4h16v16H4z"></path>
-              <path d="M4 8h16"></path>
-              <path d="M9 12h6"></path>
-            </svg>
-            <h2 class="section-title text-2xl font-semibold text-white">Contact</h2>
-          </div>
-          <div class="rounded-3xl bg-slate-900/90 p-6 border border-slate-700 space-y-4">
-            <div>
-              <p class="text-slate-400 uppercase text-xs tracking-[0.2em]">Email</p>
-              <p class="mt-2 text-white font-medium">Thamrongphaisan@gmail.com</p>
-            </div>
-            <div>
-              <p class="text-slate-400 uppercase text-xs tracking-[0.2em]">Phone</p>
-              <p class="mt-2 text-white font-medium">082-528-7478</p>
-            </div>
-            <a href="mailto:Thamrongphaisan@gmail.com" class="inline-flex rounded-full bg-cyan-500/15 px-4 py-3 text-cyan-200 hover:bg-cyan-500/25 transition">Send an email</a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="contact" class="mb-10">
-      <div class="reveal" style="animation-delay: 0.45s;">
-        <h2 class="section-title text-2xl font-semibold text-white">Message Me</h2>
-        <p class="mt-4 max-w-2xl text-slate-300 leading-7">Have a backend, AI, or IoT project in mind? Send a message and I’ll get back to you promptly.</p>
-      </div>
-      <form action="mailto:Thamrongphaisan@gmail.com" method="post" encType="text/plain" class="mt-8 grid gap-5 sm:grid-cols-[1fr_0.8fr]">
-        <div class="grid gap-5">
-          <label class="block">
-            <span class="text-slate-300">Name</span>
-            <input type="text" name="name" placeholder="Your name" class="mt-2 w-full rounded-3xl border border-slate-700 bg-slate-950/95 px-4 py-3 text-slate-100 focus:border-cyan-400 focus:outline-none" />
-          </label>
-          <label class="block">
-            <span class="text-slate-300">Email</span>
-            <input type="email" name="email" placeholder="you@example.com" class="mt-2 w-full rounded-3xl border border-slate-700 bg-slate-950/95 px-4 py-3 text-slate-100 focus:border-cyan-400 focus:outline-none" />
-          </label>
-        </div>
-        <div class="grid gap-5">
-          <label class="block h-full">
-            <span class="text-slate-300">Message</span>
-            <textarea name="message" rows="7" placeholder="Tell me about your project" class="mt-2 h-full w-full rounded-3xl border border-slate-700 bg-slate-950/95 px-4 py-3 text-slate-100 focus:border-cyan-400 focus:outline-none"></textarea>
-          </label>
-          <button type="submit" class="inline-flex items-center justify-center rounded-full bg-cyan-400 px-6 py-3 text-sm font-semibold text-slate-950 transition hover:bg-cyan-300">Send Message</button>
-        </div>
-      </form>
-    </section>
-
-    <footer class="border-t border-slate-800 pt-6 text-center text-slate-500 text-sm">Designed for recruiters and engineering teams. Crafted with a focused dark aesthetic and hardware-to-cloud storytelling.</footer>
+    </div>
+    <div class="hidden md:flex items-center gap-1 text-sm">
+      <a href="#overview" class="px-3 py-2 rounded hover:bg-slate-100">Overview</a>
+      <a href="#flows" class="px-3 py-2 rounded hover:bg-slate-100">User Flows</a>
+      <a href="#portals" class="px-3 py-2 rounded hover:bg-slate-100">Portals</a>
+      <a href="#timeline" class="px-3 py-2 rounded hover:bg-slate-100">Timeline</a>
+      <a href="#tech" class="px-3 py-2 rounded hover:bg-slate-100">Tech</a>
+    </div>
+    <div class="flex items-center gap-2 text-xs">
+      <button class="lang-btn px-2 py-1 rounded border border-slate-300 bg-slate-900 text-white font-semibold" data-lang="th">ไทย</button>
+      <button class="lang-btn px-2 py-1 rounded border border-slate-300 hover:bg-slate-50" data-lang="en">EN</button>
+      <button class="lang-btn px-2 py-1 rounded border border-slate-300 hover:bg-slate-50" data-lang="zh">中文</button>
+    </div>
   </div>
+</nav>
+
+<!-- ============ HERO ============ -->
+<section class="max-w-7xl mx-auto px-4 pt-10 pb-6">
+  <div class="grid md:grid-cols-2 gap-8 items-center">
+    <div>
+      <div class="inline-flex items-center gap-2 bg-emerald-100 text-emerald-800 text-xs font-semibold px-3 py-1 rounded-full mb-4">
+        <span class="w-2 h-2 rounded-full bg-emerald-500 pulse-dot"></span>
+        Prototype v0.1 · Phase 1 Scope
+      </div>
+      <h1 class="text-4xl md:text-5xl font-extrabold leading-tight tracking-tight">
+        ระบบเชื่อมโซ่อุปทาน<br/>
+        <span class="brand-text">ทุเรียน × มะพร้าว</span><br/>
+        ครบวงจรจากสวนถึงจีน
+      </h1>
+      <p class="mt-4 text-slate-600 text-lg">
+        Prototype แสดง flow การทำงาน 4 ฝั่ง: ผู้ซื้อ (B2B/B2C), ผู้ผลิต (ล้ง), QC ปลายทาง และ Admin/Finance — บนฐานข้อมูลชุดเดียว
+      </p>
+      <div class="mt-6 flex flex-wrap gap-3">
+        <a href="#flows" class="brand-grad text-white px-5 py-3 rounded-lg font-semibold shadow hover:shadow-lg transition">ดู User Flow →</a>
+        <a href="#portals" class="bg-white border border-slate-300 px-5 py-3 rounded-lg font-semibold hover:bg-slate-50 transition">ทดลอง Portals</a>
+      </div>
+    </div>
+
+    <!-- Ecosystem diagram -->
+    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 md:p-8">
+      <div class="text-sm font-semibold text-slate-500 mb-4 uppercase tracking-wider">System Ecosystem</div>
+      <div class="relative">
+        <div class="grid grid-cols-3 gap-3 text-center text-xs font-semibold">
+          <div class="bg-emerald-50 border border-emerald-200 rounded-lg p-3">
+            <div class="text-2xl mb-1">🏭</div>
+            <div class="text-emerald-800">ผู้ผลิต / ล้ง</div>
+            <div class="text-slate-500 font-normal mt-1">ไทย</div>
+          </div>
+          <div class="bg-sky-50 border border-sky-200 rounded-lg p-3">
+            <div class="text-2xl mb-1">🚢</div>
+            <div class="text-sky-800">โลจิสติกส์ / QC</div>
+            <div class="text-slate-500 font-normal mt-1">เรือ/อุโมงค์</div>
+          </div>
+          <div class="bg-amber-50 border border-amber-200 rounded-lg p-3">
+            <div class="text-2xl mb-1">🛒</div>
+            <div class="text-amber-800">ผู้ซื้อ B2B/B2C</div>
+            <div class="text-slate-500 font-normal mt-1">จีน / สากล</div>
+          </div>
+        </div>
+        <div class="mt-4 brand-grad text-white rounded-lg p-4 text-center">
+          <div class="text-xs opacity-80 font-semibold uppercase tracking-wider">Core</div>
+          <div class="font-bold text-lg">Soraphob Global Platform</div>
+          <div class="text-xs opacity-90 mt-1">1 Database · 1 API · B2B + B2C · Real-time</div>
+        </div>
+        <div class="mt-4 grid grid-cols-4 gap-2 text-center text-[11px]">
+          <div class="bg-slate-50 rounded p-2">💼<div class="font-semibold mt-1">Wallet</div></div>
+          <div class="bg-slate-50 rounded p-2">📱<div class="font-semibold mt-1">QR Trace</div></div>
+          <div class="bg-slate-50 rounded p-2">💰<div class="font-semibold mt-1">Phased Pay</div></div>
+          <div class="bg-slate-50 rounded p-2">🏦<div class="font-semibold mt-1">Bank Sync</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ OVERVIEW ============ -->
+<section id="overview" class="max-w-7xl mx-auto px-4 py-10">
+  <h2 class="text-2xl md:text-3xl font-bold mb-2">1. ภาพรวมระบบ</h2>
+  <p class="text-slate-600 mb-6">ตัวกลางเชื่อม 3 ฝั่ง ด้วยข้อมูลแบบเรียลไทม์ · ความโปร่งใสทางการเงิน · ควบคุมคุณภาพตั้งแต่สวนถึงปลายทาง</p>
+
+  <div class="grid md:grid-cols-4 gap-4">
+    <div class="bg-white rounded-xl border border-slate-200 p-5">
+      <div class="text-3xl mb-2">🌐</div>
+      <div class="font-bold">3 ภาษา</div>
+      <div class="text-sm text-slate-600 mt-1">ไทย / อังกฤษ / จีน · Auto-detect จากอุปกรณ์</div>
+    </div>
+    <div class="bg-white rounded-xl border border-slate-200 p-5">
+      <div class="text-3xl mb-2">🗄️</div>
+      <div class="font-bold">Single DB / API</div>
+      <div class="text-sm text-slate-600 mt-1">B2B + B2C ใช้หลังบ้านชุดเดียว Admin จัดการที่เดียว</div>
+    </div>
+    <div class="bg-white rounded-xl border border-slate-200 p-5">
+      <div class="text-3xl mb-2">📱</div>
+      <div class="font-bold">Responsive</div>
+      <div class="text-sm text-slate-600 mt-1">Web App แสดงผลทุกอุปกรณ์ · Mobile-first</div>
+    </div>
+    <div class="bg-white rounded-xl border border-slate-200 p-5">
+      <div class="text-3xl mb-2">🔒</div>
+      <div class="font-bold">Anti-hacking</div>
+      <div class="text-sm text-slate-600 mt-1">ธุรกรรมการเงินสูง · 2FA · Audit log · Role-based</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ USER FLOWS ============ -->
+<section id="flows" class="max-w-7xl mx-auto px-4 py-10">
+  <h2 class="text-2xl md:text-3xl font-bold mb-2">2. User Flow แต่ละฝั่ง</h2>
+  <p class="text-slate-600 mb-6">คลิกแท็บเพื่อดู flow ของแต่ละผู้ใช้งาน</p>
+
+  <div class="flex flex-wrap gap-2 mb-6 overflow-x-auto scroll-mask">
+    <button class="tab-btn active whitespace-nowrap px-4 py-2 rounded-lg bg-white border border-slate-300 font-semibold text-sm" data-tab="b2b">🏢 B2B (ผู้ซื้อส่ง)</button>
+    <button class="tab-btn whitespace-nowrap px-4 py-2 rounded-lg bg-white border border-slate-300 font-semibold text-sm" data-tab="b2c">🛒 B2C (ปลีก)</button>
+    <button class="tab-btn whitespace-nowrap px-4 py-2 rounded-lg bg-white border border-slate-300 font-semibold text-sm" data-tab="supplier">🏭 ล้ง (Supplier)</button>
+    <button class="tab-btn whitespace-nowrap px-4 py-2 rounded-lg bg-white border border-slate-300 font-semibold text-sm" data-tab="qc">🔍 QC (ปลายทาง)</button>
+    <button class="tab-btn whitespace-nowrap px-4 py-2 rounded-lg bg-white border border-slate-300 font-semibold text-sm" data-tab="admin">⚙️ Admin / Finance</button>
+  </div>
+
+  <!-- B2B Flow -->
+  <div class="tab-panel" data-panel="b2b">
+    <div class="bg-white rounded-2xl border border-slate-200 p-6">
+      <h3 class="font-bold text-lg mb-1">Flow ผู้ซื้อส่ง (นิติบุคคล · จีน/สากล)</h3>
+      <p class="text-sm text-slate-500 mb-6">รอ Admin ตรวจเอกสารก่อนจึงจะเห็นราคาส่ง · Wallet โอน 100% ล่วงหน้า · Quote มี Countdown</p>
+
+      <div class="grid md:grid-cols-7 gap-4 md:gap-8">
+        <div class="step-card relative bg-emerald-50 border border-emerald-200 rounded-xl p-4 md:flow-arrow">
+          <div class="text-xs font-bold text-emerald-700">STEP 1</div>
+          <div class="font-semibold mt-1">สมัครสมาชิก B2B</div>
+          <div class="text-xs text-slate-600 mt-2">อัปโหลดเอกสารนิติบุคคล รอ Admin verify</div>
+        </div>
+        <div class="step-card relative bg-emerald-50 border border-emerald-200 rounded-xl p-4 md:flow-arrow">
+          <div class="text-xs font-bold text-emerald-700">STEP 2</div>
+          <div class="font-semibold mt-1">เติม Wallet</div>
+          <div class="text-xs text-slate-600 mt-2">โอน 100% ล่วงหน้า ระบบอ่านยอดจากธนาคาร</div>
+        </div>
+        <div class="step-card relative bg-emerald-50 border border-emerald-200 rounded-xl p-4 md:flow-arrow">
+          <div class="text-xs font-bold text-emerald-700">STEP 3</div>
+          <div class="font-semibold mt-1">เลือกสินค้า</div>
+          <div class="text-xs text-slate-600 mt-2">ทุเรียน/มะพร้าว (เจียร์/ไม่เจียร์) · Gift Set · New Arrival</div>
+        </div>
+        <div class="step-card relative bg-emerald-50 border border-emerald-200 rounded-xl p-4 md:flow-arrow">
+          <div class="text-xs font-bold text-emerald-700">STEP 4</div>
+          <div class="font-semibold mt-1">รับ Quotation</div>
+          <div class="text-xs text-slate-600 mt-2">Countdown 5-7 วัน ก่อนราคาปรับตามตลาด</div>
+        </div>
+        <div class="step-card relative bg-emerald-50 border border-emerald-200 rounded-xl p-4 md:flow-arrow">
+          <div class="text-xs font-bold text-emerald-700">STEP 5</div>
+          <div class="font-semibold mt-1">เลือกขนส่ง</div>
+          <div class="text-xs text-slate-600 mt-2">เรือ 🚢 หรือ รถไฟ (อุโมงค์สแกน) 🚆</div>
+        </div>
+        <div class="step-card relative bg-emerald-50 border border-emerald-200 rounded-xl p-4 md:flow-arrow">
+          <div class="text-xs font-bold text-emerald-700">STEP 6</div>
+          <div class="font-semibold mt-1">ยืนยันออเดอร์</div>
+          <div class="text-xs text-slate-600 mt-2">Wallet ถูกตัดตามงวด 50/20/30</div>
+        </div>
+        <div class="step-card relative bg-emerald-50 border border-emerald-200 rounded-xl p-4">
+          <div class="text-xs font-bold text-emerald-700">STEP 7</div>
+          <div class="font-semibold mt-1">ติดตาม + รับสินค้า</div>
+          <div class="text-xs text-slate-600 mt-2">QC ตรวจที่ปลายทาง · ออก Certificate</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- B2C Flow -->
+  <div class="tab-panel hidden" data-panel="b2c">
+    <div class="bg-white rounded-2xl border border-slate-200 p-6">
+      <h3 class="font-bold text-lg mb-1">Flow ผู้ซื้อปลีก</h3>
+      <p class="text-sm text-slate-500 mb-6">UX คล้าย Singha Online · สมัครเสร็จสั่งได้ทันที · รองรับ Phase 2</p>
+      <div class="grid md:grid-cols-5 gap-4 md:gap-8">
+        <div class="step-card relative bg-amber-50 border border-amber-200 rounded-xl p-4 md:flow-arrow">
+          <div class="text-xs font-bold text-amber-700">STEP 1</div>
+          <div class="font-semibold mt-1">สมัคร/เข้าสู่ระบบ</div>
+          <div class="text-xs text-slate-600 mt-2">Email / Phone · ไม่ต้อง verify เอกสาร</div>
+        </div>
+        <div class="step-card relative bg-amber-50 border border-amber-200 rounded-xl p-4 md:flow-arrow">
+          <div class="text-xs font-bold text-amber-700">STEP 2</div>
+          <div class="font-semibold mt-1">เลือกสินค้า</div>
+          <div class="text-xs text-slate-600 mt-2">ราคาปลีก · Gift Set · Request Sample</div>
+        </div>
+        <div class="step-card relative bg-amber-50 border border-amber-200 rounded-xl p-4 md:flow-arrow">
+          <div class="text-xs font-bold text-amber-700">STEP 3</div>
+          <div class="font-semibold mt-1">Checkout</div>
+          <div class="text-xs text-slate-600 mt-2">ชำระตรง · ไม่ต้อง Wallet · ที่อยู่จัดส่ง</div>
+        </div>
+        <div class="step-card relative bg-amber-50 border border-amber-200 rounded-xl p-4 md:flow-arrow">
+          <div class="text-xs font-bold text-amber-700">STEP 4</div>
+          <div class="font-semibold mt-1">รับสินค้า</div>
+          <div class="text-xs text-slate-600 mt-2">ส่งตามที่อยู่ · สแกน QR ตรวจต้นทาง</div>
+        </div>
+        <div class="step-card relative bg-amber-50 border border-amber-200 rounded-xl p-4">
+          <div class="text-xs font-bold text-amber-700">STEP 5</div>
+          <div class="font-semibold mt-1">Review</div>
+          <div class="text-xs text-slate-600 mt-2">รีวิว · ขอคืน · Special Request</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Supplier Flow -->
+  <div class="tab-panel hidden" data-panel="supplier">
+    <div class="bg-white rounded-2xl border border-slate-200 p-6">
+      <h3 class="font-bold text-lg mb-1">Flow ล้ง (ผู้ผลิต)</h3>
+      <p class="text-sm text-slate-500 mb-6">ระบบรับงานเช็ค Capacity (3-5 ตู้/วัน) · อัปเดตสถานะ 4 จุด · QR รายชิ้น · วางบิล</p>
+      <div class="grid md:grid-cols-6 gap-4 md:gap-8">
+        <div class="step-card relative bg-sky-50 border border-sky-200 rounded-xl p-4 md:flow-arrow">
+          <div class="text-xs font-bold text-sky-700">STEP 1</div>
+          <div class="font-semibold mt-1">รับงาน</div>
+          <div class="text-xs text-slate-600 mt-2">เช็ค Capacity · โควตาเต็ม ≠ จ่ายงานเพิ่ม</div>
+        </div>
+        <div class="step-card relative bg-sky-50 border border-sky-200 rounded-xl p-4 md:flow-arrow">
+          <div class="text-xs font-bold text-sky-700">STEP 2</div>
+          <div class="font-semibold mt-1">รับมัดจำ 50%</div>
+          <div class="text-xs text-slate-600 mt-2">กดยืนยัน → Status: Deposit Received</div>
+        </div>
+        <div class="step-card relative bg-sky-50 border border-sky-200 rounded-xl p-4 md:flow-arrow">
+          <div class="text-xs font-bold text-sky-700">STEP 3</div>
+          <div class="font-semibold mt-1">แพ็ก + QR</div>
+          <div class="text-xs text-slate-600 mt-2">Generate QR (วันผลิต + รหัสล้ง + Lot) ติดขั้ว</div>
+        </div>
+        <div class="step-card relative bg-sky-50 border border-sky-200 rounded-xl p-4 md:flow-arrow">
+          <div class="text-xs font-bold text-sky-700">STEP 4</div>
+          <div class="font-semibold mt-1">ปิดตู้คอนเทนเนอร์</div>
+          <div class="text-xs text-slate-600 mt-2">ระบุเลขตู้ → ได้งวด 2 (20%)</div>
+        </div>
+        <div class="step-card relative bg-sky-50 border border-sky-200 rounded-xl p-4 md:flow-arrow">
+          <div class="text-xs font-bold text-sky-700">STEP 5</div>
+          <div class="font-semibold mt-1">Shipped</div>
+          <div class="text-xs text-slate-600 mt-2">ส่งออกแล้ว · รอ QC ปลายทาง</div>
+        </div>
+        <div class="step-card relative bg-sky-50 border border-sky-200 rounded-xl p-4">
+          <div class="text-xs font-bold text-sky-700">STEP 6</div>
+          <div class="font-semibold mt-1">วางบิล + งวด 3</div>
+          <div class="text-xs text-slate-600 mt-2">เอกสารผ่านระบบ · หักเคลม/ค่ากล่องอัตโนมัติ</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- QC Flow -->
+  <div class="tab-panel hidden" data-panel="qc">
+    <div class="bg-white rounded-2xl border border-slate-200 p-6">
+      <h3 class="font-bold text-lg mb-1">Flow QC ปลายทาง (Third-Party · จีน)</h3>
+      <p class="text-sm text-slate-500 mb-6">เปิดตู้ · บันทึกผล · อัปโหลดรูป/อุณหภูมิ · ออก Certificate → ปลดงวดสุดท้าย</p>
+      <div class="grid md:grid-cols-5 gap-4 md:gap-8">
+        <div class="step-card relative bg-purple-50 border border-purple-200 rounded-xl p-4 md:flow-arrow">
+          <div class="text-xs font-bold text-purple-700">STEP 1</div>
+          <div class="font-semibold mt-1">เปิดตู้</div>
+          <div class="text-xs text-slate-600 mt-2">สแกน QR ตู้ · ดึงข้อมูล Lot</div>
+        </div>
+        <div class="step-card relative bg-purple-50 border border-purple-200 rounded-xl p-4 md:flow-arrow">
+          <div class="text-xs font-bold text-purple-700">STEP 2</div>
+          <div class="font-semibold mt-1">ตรวจคุณภาพ</div>
+          <div class="text-xs text-slate-600 mt-2">เกรด · น้ำหนัก · ความสุก · รอยช้ำ</div>
+        </div>
+        <div class="step-card relative bg-purple-50 border border-purple-200 rounded-xl p-4 md:flow-arrow">
+          <div class="text-xs font-bold text-purple-700">STEP 3</div>
+          <div class="font-semibold mt-1">อัปโหลดหลักฐาน</div>
+          <div class="text-xs text-slate-600 mt-2">รูปภาพ · Temperature log · วิดีโอ</div>
+        </div>
+        <div class="step-card relative bg-purple-50 border border-purple-200 rounded-xl p-4 md:flow-arrow">
+          <div class="text-xs font-bold text-purple-700">STEP 4</div>
+          <div class="font-semibold mt-1">คำนวณเคลม</div>
+          <div class="text-xs text-slate-600 mt-2">% เสียหาย > เกณฑ์ (เช่น 5%) → หักงวดสุดท้าย</div>
+        </div>
+        <div class="step-card relative bg-purple-50 border border-purple-200 rounded-xl p-4">
+          <div class="text-xs font-bold text-purple-700">STEP 5</div>
+          <div class="font-semibold mt-1">ออก Certificate</div>
+          <div class="text-xs text-slate-600 mt-2">Trigger งวด 3 (30%) ให้ล้ง</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Admin Flow -->
+  <div class="tab-panel hidden" data-panel="admin">
+    <div class="bg-white rounded-2xl border border-slate-200 p-6">
+      <h3 class="font-bold text-lg mb-1">Flow Admin / Finance</h3>
+      <p class="text-sm text-slate-500 mb-6">ควบคุมการจ่ายเงิน · บริหารกล่อง · Auto-Reconcile · แยกบัญชีทุเรียน/มะพร้าว</p>
+      <div class="grid md:grid-cols-5 gap-4 md:gap-8">
+        <div class="step-card relative bg-rose-50 border border-rose-200 rounded-xl p-4 md:flow-arrow">
+          <div class="text-xs font-bold text-rose-700">STEP 1</div>
+          <div class="font-semibold mt-1">Verify B2B</div>
+          <div class="text-xs text-slate-600 mt-2">ตรวจเอกสารนิติบุคคล · ปลดล็อกราคาส่ง</div>
+        </div>
+        <div class="step-card relative bg-rose-50 border border-rose-200 rounded-xl p-4 md:flow-arrow">
+          <div class="text-xs font-bold text-rose-700">STEP 2</div>
+          <div class="font-semibold mt-1">คุม Wallet</div>
+          <div class="text-xs text-slate-600 mt-2">Reconcile กับธนาคาร · ดูยอดคงเหลือทุก acc.</div>
+        </div>
+        <div class="step-card relative bg-rose-50 border border-rose-200 rounded-xl p-4 md:flow-arrow">
+          <div class="text-xs font-bold text-rose-700">STEP 3</div>
+          <div class="font-semibold mt-1">จ่ายงวดล้ง</div>
+          <div class="text-xs text-slate-600 mt-2">50% → 20% → 30% ตาม trigger</div>
+        </div>
+        <div class="step-card relative bg-rose-50 border border-rose-200 rounded-xl p-4 md:flow-arrow">
+          <div class="text-xs font-bold text-rose-700">STEP 4</div>
+          <div class="font-semibold mt-1">สต๊อกกล่อง</div>
+          <div class="text-xs text-slate-600 mt-2">960 กล่อง/ตู้ · กล่องหาย = หักบิลล้ง</div>
+        </div>
+        <div class="step-card relative bg-rose-50 border border-rose-200 rounded-xl p-4">
+          <div class="text-xs font-bold text-rose-700">STEP 5</div>
+          <div class="font-semibold mt-1">Dashboard</div>
+          <div class="text-xs text-slate-600 mt-2">แยกบัญชีทุเรียน/มะพร้าว · Audit log</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PORTALS MOCKUPS ============ -->
+<section id="portals" class="max-w-7xl mx-auto px-4 py-10">
+  <h2 class="text-2xl md:text-3xl font-bold mb-2">3. Interactive Portals</h2>
+  <p class="text-slate-600 mb-6">Mock หน้าจอจริงของแต่ละ portal — คลิก ทดลองได้</p>
+
+  <div class="grid md:grid-cols-2 gap-6">
+
+    <!-- B2B Catalog Mock -->
+    <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+      <div class="bg-slate-900 text-white px-5 py-3 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 pulse-dot"></span>
+          <span class="font-semibold text-sm">B2B Portal — Catalog</span>
+        </div>
+        <span class="status-pill bg-emerald-500/30 text-emerald-200">Verified</span>
+      </div>
+      <div class="p-5">
+        <div class="flex items-center justify-between mb-4 text-sm">
+          <div>
+            <div class="text-xs text-slate-500">Wallet Balance</div>
+            <div class="font-bold text-lg">¥ 258,400.00</div>
+          </div>
+          <button class="px-3 py-1.5 bg-emerald-600 text-white rounded text-xs font-semibold">+ Top-up</button>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div class="border border-slate-200 rounded-lg p-3">
+            <div class="aspect-video bg-gradient-to-br from-yellow-200 to-amber-400 rounded flex items-center justify-center text-4xl">🥭</div>
+            <div class="mt-2 font-semibold text-sm">ทุเรียนหมอนทอง · เกรด A</div>
+            <div class="text-xs text-slate-500">ไม่เจียร์ · 18 kg/กล่อง</div>
+            <div class="flex items-center justify-between mt-2">
+              <span class="font-bold text-emerald-700">¥ 320 /kg</span>
+              <button class="text-xs px-2 py-1 bg-slate-900 text-white rounded">+ Quote</button>
+            </div>
+          </div>
+          <div class="border border-slate-200 rounded-lg p-3">
+            <div class="aspect-video bg-gradient-to-br from-lime-200 to-green-400 rounded flex items-center justify-center text-4xl">🥥</div>
+            <div class="mt-2 font-semibold text-sm">มะพร้าวน้ำหอม</div>
+            <div class="text-xs text-slate-500">เจียร์ · 9 ลูก/กล่อง</div>
+            <div class="flex items-center justify-between mt-2">
+              <span class="font-bold text-emerald-700">¥ 45 /ลูก</span>
+              <button class="text-xs px-2 py-1 bg-slate-900 text-white rounded">+ Quote</button>
+            </div>
+          </div>
+        </div>
+        <div class="mt-3 flex gap-2 text-xs">
+          <button class="flex-1 border border-slate-300 rounded py-2 hover:bg-slate-50">📦 Request Sample</button>
+          <button class="flex-1 border border-slate-300 rounded py-2 hover:bg-slate-50">✏️ Special Request</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quotation Mock with Live Countdown -->
+    <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+      <div class="bg-slate-900 text-white px-5 py-3 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-amber-400 pulse-dot"></span>
+          <span class="font-semibold text-sm">Quotation #QT-2026-0421</span>
+        </div>
+        <span class="status-pill bg-amber-500/30 text-amber-200">Pending</span>
+      </div>
+      <div class="p-5">
+        <div class="text-center bg-amber-50 rounded-lg p-4 border border-amber-200">
+          <div class="text-xs font-semibold text-amber-800 uppercase tracking-wider">Countdown</div>
+          <div class="font-mono text-3xl font-bold text-amber-900 mt-1" id="countdown">5d 23h 59m 45s</div>
+          <div class="text-xs text-slate-600 mt-1">หลังหมดเวลา ราคาจะปรับตามกลไกตลาด</div>
+        </div>
+        <div class="mt-4 space-y-2 text-sm">
+          <div class="flex justify-between"><span class="text-slate-600">ทุเรียนหมอนทอง A × 960 กล่อง</span><span class="font-semibold">¥ 5,529,600</span></div>
+          <div class="flex justify-between"><span class="text-slate-600">มะพร้าวเจียร์ × 540 กล่อง</span><span class="font-semibold">¥ 218,700</span></div>
+          <div class="flex justify-between"><span class="text-slate-600">ขนส่ง (🚆 อุโมงค์สแกน)</span><span class="font-semibold">¥ 128,000</span></div>
+          <div class="flex justify-between pt-2 border-t border-slate-200"><span class="font-bold">รวม</span><span class="font-bold text-emerald-700">¥ 5,876,300</span></div>
+        </div>
+        <div class="mt-4 flex gap-2">
+          <button class="flex-1 py-2.5 brand-grad text-white rounded font-semibold text-sm">ยืนยันสั่งซื้อ</button>
+          <button class="px-4 py-2.5 border border-slate-300 rounded text-sm">เจรจา</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Supplier Task Mock -->
+    <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+      <div class="bg-slate-900 text-white px-5 py-3 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-sky-400 pulse-dot"></span>
+          <span class="font-semibold text-sm">Supplier Portal — ล้งจันทบุรี #L-042</span>
+        </div>
+        <span class="status-pill bg-sky-500/30 text-sky-200">3/5 ตู้วันนี้</span>
+      </div>
+      <div class="p-5">
+        <div class="text-xs text-slate-500 mb-2">Active Job · #JOB-2026-0418-A</div>
+        <div class="flex items-center gap-3 mb-4">
+          <div class="flex-1 grid grid-cols-4 gap-1 text-[10px] text-center">
+            <div class="rounded bg-emerald-100 text-emerald-800 py-1.5 font-semibold">✓ มัดจำ</div>
+            <div class="rounded bg-emerald-100 text-emerald-800 py-1.5 font-semibold">✓ แพ็ก</div>
+            <div class="rounded bg-amber-100 text-amber-800 py-1.5 font-semibold">⏳ ปิดตู้</div>
+            <div class="rounded bg-slate-100 text-slate-500 py-1.5 font-semibold">Shipped</div>
+          </div>
+        </div>
+        <div class="space-y-2 text-sm">
+          <div class="flex justify-between"><span class="text-slate-600">สินค้า</span><span class="font-semibold">ทุเรียนหมอนทอง A × 960</span></div>
+          <div class="flex justify-between"><span class="text-slate-600">เลขตู้</span><span class="font-mono font-semibold">TCLU-7842916</span></div>
+          <div class="flex justify-between"><span class="text-slate-600">เงินงวด 1 (50%)</span><span class="font-semibold text-emerald-700">✓ รับแล้ว ฿2,764,800</span></div>
+          <div class="flex justify-between"><span class="text-slate-600">เงินงวด 2 (20%)</span><span class="font-semibold text-amber-700">ปิดตู้ปลดล็อก</span></div>
+        </div>
+        <div class="mt-4 flex gap-2">
+          <button class="flex-1 py-2 bg-slate-900 text-white rounded text-xs font-semibold">📷 พิมพ์ QR</button>
+          <button class="flex-1 py-2 brand-grad text-white rounded text-xs font-semibold">ปิดตู้ · ยืนยัน</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- QC Inspection Mock -->
+    <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+      <div class="bg-slate-900 text-white px-5 py-3 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-purple-400 pulse-dot"></span>
+          <span class="font-semibold text-sm">QC Portal · 广州港 Guangzhou</span>
+        </div>
+        <span class="status-pill bg-purple-500/30 text-purple-200">Inspecting</span>
+      </div>
+      <div class="p-5">
+        <div class="text-xs text-slate-500 mb-2">Container · TCLU-7842916</div>
+        <div class="grid grid-cols-3 gap-2 text-center mb-3">
+          <div class="bg-slate-50 rounded p-2"><div class="text-[10px] text-slate-500">Temp avg</div><div class="font-bold text-emerald-700">4.2°C</div></div>
+          <div class="bg-slate-50 rounded p-2"><div class="text-[10px] text-slate-500">Damage</div><div class="font-bold text-amber-700">3.2%</div></div>
+          <div class="bg-slate-50 rounded p-2"><div class="text-[10px] text-slate-500">Grade A</div><div class="font-bold text-emerald-700">96.8%</div></div>
+        </div>
+        <div class="text-xs font-semibold mb-1">หลักฐาน</div>
+        <div class="grid grid-cols-4 gap-1.5 mb-3">
+          <div class="aspect-square bg-gradient-to-br from-amber-200 to-yellow-400 rounded"></div>
+          <div class="aspect-square bg-gradient-to-br from-green-200 to-lime-400 rounded"></div>
+          <div class="aspect-square bg-gradient-to-br from-orange-200 to-red-300 rounded flex items-center justify-center text-xl">⚠️</div>
+          <div class="aspect-square bg-slate-100 rounded flex items-center justify-center text-slate-400 text-xl">+</div>
+        </div>
+        <div class="bg-emerald-50 border border-emerald-200 rounded p-2 text-xs">
+          <div class="font-semibold text-emerald-800">✓ เสียหาย 3.2% &lt; เกณฑ์ 5% — ไม่หักเคลม</div>
+        </div>
+        <button class="w-full mt-3 py-2 brand-grad text-white rounded text-xs font-semibold">ออก Certificate · ปลดงวด 3</button>
+      </div>
+    </div>
+
+    <!-- Admin Phased Payment Mock -->
+    <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm md:col-span-2">
+      <div class="bg-slate-900 text-white px-5 py-3 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-rose-400 pulse-dot"></span>
+          <span class="font-semibold text-sm">Admin / Finance Dashboard</span>
+        </div>
+        <span class="status-pill bg-rose-500/30 text-rose-200">Live · Bank sync 2m ago</span>
+      </div>
+      <div class="p-5 grid md:grid-cols-3 gap-4">
+        <div class="bg-slate-50 rounded-lg p-4">
+          <div class="text-xs font-semibold text-slate-500 uppercase">บัญชีทุเรียน</div>
+          <div class="font-bold text-2xl mt-1">฿ 18,245,800</div>
+          <div class="text-xs text-emerald-700 mt-1">▲ 4.2% this week</div>
+        </div>
+        <div class="bg-slate-50 rounded-lg p-4">
+          <div class="text-xs font-semibold text-slate-500 uppercase">บัญชีมะพร้าว</div>
+          <div class="font-bold text-2xl mt-1">฿ 6,108,200</div>
+          <div class="text-xs text-emerald-700 mt-1">▲ 1.8% this week</div>
+        </div>
+        <div class="bg-slate-50 rounded-lg p-4">
+          <div class="text-xs font-semibold text-slate-500 uppercase">กล่องแบรนด์คงเหลือ</div>
+          <div class="font-bold text-2xl mt-1">14,880 <span class="text-sm font-medium text-slate-500">/ 20,000</span></div>
+          <div class="text-xs text-amber-700 mt-1">⚠ 2 ล้งแจ้งกล่องหาย · หัก ฿12,400</div>
+        </div>
+
+        <div class="md:col-span-3">
+          <div class="text-sm font-semibold mb-2">Phased Payment Queue</div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead class="text-xs text-slate-500 uppercase bg-slate-50">
+                <tr>
+                  <th class="text-left px-3 py-2">Job</th>
+                  <th class="text-left px-3 py-2">ล้ง</th>
+                  <th class="text-left px-3 py-2">งวด</th>
+                  <th class="text-right px-3 py-2">ยอด</th>
+                  <th class="text-left px-3 py-2">Trigger</th>
+                  <th class="text-left px-3 py-2">Status</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100">
+                <tr><td class="px-3 py-2 font-mono text-xs">JOB-0418-A</td><td class="px-3 py-2">L-042 จันทบุรี</td><td class="px-3 py-2">2/3 (20%)</td><td class="text-right px-3 py-2 font-semibold">฿ 1,105,920</td><td class="px-3 py-2 text-xs">ปิดตู้ TCLU-784</td><td class="px-3 py-2"><span class="status-pill bg-amber-100 text-amber-800">Pending</span></td></tr>
+                <tr><td class="px-3 py-2 font-mono text-xs">JOB-0412-C</td><td class="px-3 py-2">L-017 ระยอง</td><td class="px-3 py-2">3/3 (30%)</td><td class="text-right px-3 py-2 font-semibold">฿ 1,658,880</td><td class="px-3 py-2 text-xs">Cert ออกแล้ว</td><td class="px-3 py-2"><span class="status-pill bg-emerald-100 text-emerald-800">Auto-pay</span></td></tr>
+                <tr><td class="px-3 py-2 font-mono text-xs">JOB-0410-B</td><td class="px-3 py-2">L-028 ชุมพร</td><td class="px-3 py-2">3/3 (30%)</td><td class="text-right px-3 py-2 font-semibold">฿ 892,100</td><td class="px-3 py-2 text-xs text-rose-600">เคลม 7.2% → หัก</td><td class="px-3 py-2"><span class="status-pill bg-rose-100 text-rose-800">Claim Hold</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ TIMELINE ============ -->
+<section id="timeline" class="max-w-7xl mx-auto px-4 py-10">
+  <h2 class="text-2xl md:text-3xl font-bold mb-2">4. แผนพัฒนา (Phasing)</h2>
+  <p class="text-slate-600 mb-6">แบ่ง 2 เฟส เพื่อให้มีกระแสเงินสดเร็วที่สุด</p>
+
+  <div class="grid md:grid-cols-2 gap-6">
+    <div class="bg-white rounded-2xl border-2 border-emerald-500 p-6 relative">
+      <div class="absolute -top-3 left-5 bg-emerald-500 text-white text-xs font-bold px-3 py-1 rounded-full">PHASE 1 · 3 เดือน</div>
+      <h3 class="font-bold text-xl mt-3">ระบบสั่งซื้อ + B2B Portal</h3>
+      <p class="text-slate-600 text-sm mt-1">เป้า: พรีเซนต์กลุ่มทุนและรับคำสั่งซื้อได้</p>
+      <ul class="mt-4 space-y-2 text-sm">
+        <li class="flex gap-2"><span class="text-emerald-600">✓</span> สมัครสมาชิก B2B + Verify</li>
+        <li class="flex gap-2"><span class="text-emerald-600">✓</span> Product Catalog</li>
+        <li class="flex gap-2"><span class="text-emerald-600">✓</span> การทำรายการสั่งซื้อ + Quotation</li>
+        <li class="flex gap-2"><span class="text-emerald-600">✓</span> Wallet เบื้องต้น</li>
+        <li class="flex gap-2"><span class="text-emerald-600">✓</span> Admin รับคำสั่งซื้อ</li>
+      </ul>
+    </div>
+    <div class="bg-white rounded-2xl border-2 border-sky-500 p-6 relative">
+      <div class="absolute -top-3 left-5 bg-sky-500 text-white text-xs font-bold px-3 py-1 rounded-full">PHASE 2</div>
+      <h3 class="font-bold text-xl mt-3">ระบบจัดการเต็มรูปแบบ</h3>
+      <p class="text-slate-600 text-sm mt-1">เป้า: อัตโนมัติครบวงจร + ฝั่ง B2C</p>
+      <ul class="mt-4 space-y-2 text-sm">
+        <li class="flex gap-2"><span class="text-sky-600">✓</span> Supplier Portal (ล้ง)</li>
+        <li class="flex gap-2"><span class="text-sky-600">✓</span> QC ปลายทาง</li>
+        <li class="flex gap-2"><span class="text-sky-600">✓</span> ระบบ QR Code รายชิ้น</li>
+        <li class="flex gap-2"><span class="text-sky-600">✓</span> คุมสต๊อกกล่อง + Auto-Reconcile</li>
+        <li class="flex gap-2"><span class="text-sky-600">✓</span> B2C Portal (ปลีก)</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TECH ============ -->
+<section id="tech" class="max-w-7xl mx-auto px-4 py-10">
+  <h2 class="text-2xl md:text-3xl font-bold mb-2">5. ข้อกำหนดทางเทคนิค</h2>
+  <p class="text-slate-600 mb-6">ความปลอดภัย · การเชื่อมต่อ · ความเสถียร</p>
+
+  <div class="grid md:grid-cols-3 gap-4">
+    <div class="bg-white rounded-xl border border-slate-200 p-5">
+      <div class="text-3xl mb-2">🛡️</div>
+      <div class="font-bold">Security</div>
+      <ul class="text-sm text-slate-600 mt-2 space-y-1">
+        <li>· 2FA สำหรับทุก role</li>
+        <li>· Role-based access (RBAC)</li>
+        <li>· Audit log ธุรกรรม</li>
+        <li>· Rate-limit + WAF</li>
+        <li>· Encrypted at rest/transit</li>
+      </ul>
+    </div>
+    <div class="bg-white rounded-xl border border-slate-200 p-5">
+      <div class="text-3xl mb-2">🔌</div>
+      <div class="font-bold">Integrations</div>
+      <ul class="text-sm text-slate-600 mt-2 space-y-1">
+        <li>· Bank API (Thai + CN)</li>
+        <li>· FlowAccount / Accounting</li>
+        <li>· Logistics tracking API</li>
+        <li>· SMS/Email/WeChat</li>
+        <li>· QR code generator</li>
+      </ul>
+    </div>
+    <div class="bg-white rounded-xl border border-slate-200 p-5">
+      <div class="text-3xl mb-2">⚡</div>
+      <div class="font-bold">Reliability</div>
+      <ul class="text-sm text-slate-600 mt-2 space-y-1">
+        <li>· Real-time status (WebSocket)</li>
+        <li>· CDN สำหรับ asset จีน</li>
+        <li>· Concurrent user TH+CN</li>
+        <li>· Auto-backup daily</li>
+        <li>· SLA 99.5%+</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer class="border-t border-slate-200 mt-10 py-8 text-center text-sm text-slate-500">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="font-semibold text-slate-700">Soraphob Global · Prototype v0.1</div>
+    <div class="mt-1">สร้างจาก Scope of Work · วันที่สร้าง 2026-04-20</div>
+    <div class="mt-2 text-xs">เอกสาร prototype นี้เป็น static mockup สำหรับพรีเซนต์กลุ่มทุน — ยังไม่เชื่อมต่อฐานข้อมูลจริง</div>
+    <div class="mt-3"><a href="../" class="text-sky-600 hover:underline">← กลับหน้าหลัก</a></div>
+  </div>
+</footer>
+
+<script>
+  // Tab switching
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const tab = btn.dataset.tab;
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.querySelectorAll('.tab-panel').forEach(p => {
+        p.classList.toggle('hidden', p.dataset.panel !== tab);
+      });
+    });
+  });
+
+  // Language toggle (visual only for prototype)
+  document.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.lang-btn').forEach(b => {
+        b.classList.remove('bg-slate-900', 'text-white');
+        b.classList.add('hover:bg-slate-50');
+      });
+      btn.classList.add('bg-slate-900', 'text-white');
+      btn.classList.remove('hover:bg-slate-50');
+    });
+  });
+
+  // Live countdown (5d 23h ... from now)
+  const el = document.getElementById('countdown');
+  if (el) {
+    const target = Date.now() + 6 * 24 * 3600 * 1000;
+    setInterval(() => {
+      const diff = target - Date.now();
+      if (diff <= 0) { el.textContent = '— หมดเวลา —'; return; }
+      const d = Math.floor(diff / 86400000);
+      const h = Math.floor((diff % 86400000) / 3600000);
+      const m = Math.floor((diff % 3600000) / 60000);
+      const s = Math.floor((diff % 60000) / 1000);
+      el.textContent = `${d}d ${h}h ${m}m ${s}s`;
+    }, 1000);
+  }
+</script>
 </body>
 </html>
